@@ -22,7 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements RecipeAdapter.RecipeAdapterOnClickHandler {
+public class MainActivity extends AppCompatActivity implements RecipeAdapter.RecipeAdapterOnClickHandler{
 
     public static final String LOG_TAG=MainActivity.class.getSimpleName();
 
@@ -37,13 +37,6 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-
-
-        // specify an adapter (see also next example)
-        //mAdapter = new RecipeAdapter(myDataset);
-        //mRecyclerView.setAdapter(mAdapter);
 
         mAdapter=new RecipeAdapter(MainActivity.this, null);
         mRecyclerView.setAdapter(mAdapter);
@@ -69,20 +62,11 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
                     List<Step> mListSteps= recipe.getSteps();
                     Integer mServings= recipe.getServings();
                     String mImage=recipe.getImage();
-
                     Recipe mRecipe=new Recipe(mId,mName,mListIngredients,mListSteps,mServings,mImage);
                     mRecipies.add(mRecipe);
-
                 }
 
                 mAdapter.setRecipeData(mRecipies);
-
-
-
-
-                // use a linear layout manager
-
-
 
             }
 
@@ -93,20 +77,17 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
             }
         });
 
-
-
-
-
     }
 
     @Override
     public void onClick(Recipe recipeData) {
 
-
+        Bundle b = new Bundle();
+        b.putParcelable(Recipe.PARCELABLE,recipeData);
         Intent intent =new Intent(this,RecipeDetailsActivity.class);
-
-        intent.putExtra(Recipe.PARCELABLE,recipeData);
+        intent.putExtras(b);
         startActivity(intent);
 
     }
+
 }

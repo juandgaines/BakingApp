@@ -1,6 +1,7 @@
 package com.mytechideas.bakingapp;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +12,7 @@ import com.mytechideas.bakingapp.retrofit.Step;
 
 import java.util.List;
 
-public class RecipeDetailsActivity extends AppCompatActivity {
+public class RecipeDetailsActivity extends AppCompatActivity implements MasterListRecipe.OnStepClickListener{
 
     public static final String LOG_TAG= RecipeDetailsActivity.class.getSimpleName();
 
@@ -21,21 +22,28 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_details);
 
+        if(savedInstanceState == null) {
 
-        Intent intent =getIntent();
+            // Retrieve list index values that were sent through an intent; use them to display the desired Android-Me body part image
+            // Use setListindex(int index) to set the list index for all BodyPartFragments
 
-        if(intent!=null){
+            // Create a new head BodyPartFragment
+            MasterListRecipe mMaster = new MasterListRecipe();
 
-            final Recipe recipeData = intent.getParcelableExtra(Recipe.PARCELABLE);
-            final int id=recipeData.getId();
-            final String mNameStr =recipeData.getName();
-            final List<Ingredient> mIngredientsList=recipeData.getIngredients();
-            final List<Step> mStepsList=recipeData.getSteps();
-            final Integer mServings= recipeData.getServings() ;
-            final String mImage=recipeData.getImage();
+            Recipe pRecipe= getIntent().getParcelableExtra(Recipe.PARCELABLE);
+            mMaster.setRecipe(pRecipe);
 
-            Log.d(LOG_TAG,"Name:" +mNameStr+ " and ID: "+id);
+            FragmentManager fragmentManager = getSupportFragmentManager();
 
+            fragmentManager.beginTransaction()
+                    .add(R.id.recipe_container, mMaster)
+                    .commit();
         }
+    }
+
+    @Override
+    public void onStepSelected(int position) {
+
+
     }
 }
