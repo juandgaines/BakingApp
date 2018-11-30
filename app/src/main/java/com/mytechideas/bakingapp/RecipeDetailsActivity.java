@@ -5,45 +5,128 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.mytechideas.bakingapp.retrofit.Ingredient;
 import com.mytechideas.bakingapp.retrofit.Recipe;
 import com.mytechideas.bakingapp.retrofit.Step;
+import com.mytechideas.bakingapp.retrofit.StepRecipeContainerClass;
 
 import java.util.List;
 
 public class RecipeDetailsActivity extends AppCompatActivity implements MasterListRecipe.OnStepClickListener{
 
     public static final String LOG_TAG= RecipeDetailsActivity.class.getSimpleName();
+    private static final String MODE_STATE = "state";
+    private static final String TABLE_MODE = "mode";
+    private boolean twoPanel;
 
+
+    private StepDetailFragment mDetail;
+
+
+
+    private Recipe pRecipe;
+
+    public boolean getTwoPanelState(){
+
+        return twoPanel;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_details);
 
-        if(savedInstanceState == null) {
+        if(savedInstanceState==null) {
 
-            // Retrieve list index values that were sent through an intent; use them to display the desired Android-Me body part image
-            // Use setListindex(int index) to set the list index for all BodyPartFragments
+            pRecipe = getIntent().getParcelableExtra(Recipe.PARCELABLE);
 
-            // Create a new head BodyPartFragment
             MasterListRecipe mMaster = new MasterListRecipe();
-
-            Recipe pRecipe= getIntent().getParcelableExtra(Recipe.PARCELABLE);
             mMaster.setRecipe(pRecipe);
+
 
             FragmentManager fragmentManager = getSupportFragmentManager();
 
             fragmentManager.beginTransaction()
                     .add(R.id.recipe_container, mMaster)
                     .commit();
+
+
+            if (findViewById(R.id.recipe_details_linear_layout) != null) {
+
+                twoPanel = true;
+
+                mDetail = new StepDetailFragment();
+
+
+                Step pStep = pRecipe.getSteps().get(0);
+                mDetail.setStep(pStep);
+
+                mDetail.setMode(twoPanel);
+
+                fragmentManager.beginTransaction()
+                        .add(R.id.step_container, mDetail)
+                        .commit();
+
+
+            }
         }
+
+
     }
 
     @Override
-    public void onStepSelected(int position) {
+    public void onStepSelected(Step position) {
+
+        if(twoPanel){
+
+            mDetail = new StepDetailFragment();
+
+            mDetail.setStep(position);
+            mDetail.setMode(twoPanel);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.step_container,mDetail)
+                    .commit();
+
+        }
+
+        else{
+
+            Bundle b = new Bundle();
+            StepRecipeContainerClass mTesting= new StepRecipeContainerClass(pRecipe,position);
+
+
+            b.putParcelable(StepRecipeContainerClass.PARCELABLE, mTesting);
+
+            // Attach the Bundle to an intent
+            final Intent intent = new Intent(this, StepDetailActivity.class);
+            intent.putExtras(b);
+
+            startActivity(intent);
+
+        }
 
 
     }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+       // twoPanel=savedInstanceState.getBoolean(TABLE_MODE);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //getSupportFragmentManager().putFragment(outState, "myFragmentName", mDetail);
+        //outState.putBoolean(TABLE_MODE,twoPanel);
+
+    }
+
 }

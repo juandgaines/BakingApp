@@ -31,7 +31,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepHolder> 
     }
 
     public interface StepsAdapterOnClickHandler {
-        void onClick(Step stepData);
+        void onClick(Step position);
     }
 
 
@@ -49,7 +49,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull StepsAdapter.StepHolder stepViewHolder, int position ) {
-        String mTitle =mStepData.get(position).getDescription();
+        String mTitle =mStepData.get(position).getShortDescription();
 
         stepViewHolder.mRecipePosterView.setImageDrawable(context.getDrawable(R.drawable.ic_cake_2));
         stepViewHolder.mTitleStep.setText(mTitle);

@@ -20,6 +20,7 @@ class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHolder> {
 
     public final static String LOG_TAG= RecipeAdapter.class.getName().toString();
     private Context context;
+    public static int count=0;
     private List<Recipe> mRecipeData;
     private final RecipeAdapterOnClickHandler mClickHandler;
 
@@ -56,8 +57,23 @@ class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHolder> {
 
         float divisor= outValue.getFloat();
 
+        if(count==0){
+            recipeViewHolder.mRecipePosterView.setImageDrawable(context.getDrawable(R.drawable.ic_nutella_pie_2));
+            count++;
+        }
+        else  if(count==1){
+            recipeViewHolder.mRecipePosterView.setImageDrawable(context.getDrawable(R.drawable.ic_brownie_2));
+            count++;
+        }
+        else  if(count==2){
+            recipeViewHolder.mRecipePosterView.setImageDrawable(context.getDrawable(R.drawable.ic_yellowcake));
+            count++;
+        }
+        else  if(count==3){
+            recipeViewHolder.mRecipePosterView.setImageDrawable(context.getDrawable(R.drawable.ic_cheescake));
+            count=0;
+        }
 
-        recipeViewHolder.mRecipePosterView.setImageDrawable(context.getDrawable(R.drawable.ic_cake_1));
         recipeViewHolder.mTitleRecipe.setText(mTitle);
 
 

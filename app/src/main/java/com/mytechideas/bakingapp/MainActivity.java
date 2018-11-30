@@ -1,8 +1,11 @@
 package com.mytechideas.bakingapp;
 
 import android.content.Intent;
+import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,8 +28,11 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity implements RecipeAdapter.RecipeAdapterOnClickHandler{
 
     public static final String LOG_TAG=MainActivity.class.getSimpleName();
+    public static final String KEY_RECYCLERVIEW_1="position1";
+    private Parcelable mRecyclerViewState1;
 
     @BindView(R.id.recipe_listview) RecyclerView mRecyclerView;
+
 
     private RecipeAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -42,9 +48,13 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         mRecyclerView.setAdapter(mAdapter);
 
         RecipeService movieService= RetrofitSingleton.getRecipeService();
-        mLayoutManager = new LinearLayoutManager(this);
+        final int columns = getResources().getInteger(R.integer.activity_columns_recyclerview);
+        mLayoutManager = new GridLayoutManager(this,columns);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        if (mRecyclerViewState1 != null) {
+            mLayoutManager.onRestoreInstanceState(mRecyclerViewState1);
+        }
 
         mRecyclerView.setHasFixedSize(true);
 
@@ -64,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
                     String mImage=recipe.getImage();
                     Recipe mRecipe=new Recipe(mId,mName,mListIngredients,mListSteps,mServings,mImage);
                     mRecipies.add(mRecipe);
+
+                    Log.d(LOG_TAG,mId + mName);
                 }
 
                 mAdapter.setRecipeData(mRecipies);
@@ -88,6 +100,30 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         intent.putExtras(b);
         startActivity(intent);
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save UI state changes to the savedInstanceState.
+        // This bundle will be passed to onCreate if the process is
+        // killed and restarted.
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putParcelable(KEY_RECYCLERVIEW_1, mRecyclerView.getLayoutManager().onSaveInstanceState());
+
+
+    }
+
+
+
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if(savedInstanceState!=null){
+            mRecyclerViewState1 = savedInstanceState.getParcelable(KEY_RECYCLERVIEW_1);
+
+        }
     }
 
 }
