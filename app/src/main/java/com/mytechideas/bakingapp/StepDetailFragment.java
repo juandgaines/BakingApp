@@ -79,13 +79,14 @@ public class StepDetailFragment extends Fragment {
             mStep=savedInstanceState.getParcelable(STEP_STATE);
             mode=savedInstanceState.getBoolean(TABLETMODE);
         }
-
+        Button button = rootView.findViewById(R.id.button_next);
         String overAllDescription=mStep.getDescription();
 
         textView.setText(overAllDescription);
-        Button button = rootView.findViewById(R.id.button_next);
+
 
         if(!mode) {
+
 
             button.setVisibility(View.VISIBLE);
             button.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +103,6 @@ public class StepDetailFragment extends Fragment {
 
         }
 
-
         return rootView;
     }
 
@@ -111,7 +111,7 @@ public class StepDetailFragment extends Fragment {
         super.onSaveInstanceState(outState);
 
         outState.putParcelable(STEP_STATE,mStep);
-        outState.putBoolean(TABLETMODE,mode);
+
 
 
     }

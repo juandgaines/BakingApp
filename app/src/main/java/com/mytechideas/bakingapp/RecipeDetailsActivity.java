@@ -113,20 +113,5 @@ public class RecipeDetailsActivity extends AppCompatActivity implements MasterLi
 
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-       // twoPanel=savedInstanceState.getBoolean(TABLE_MODE);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        //getSupportFragmentManager().putFragment(outState, "myFragmentName", mDetail);
-        //outState.putBoolean(TABLE_MODE,twoPanel);
-
-    }
 
 }

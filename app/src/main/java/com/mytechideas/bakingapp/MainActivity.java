@@ -113,9 +113,6 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
 
     }
 
-
-
-
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
