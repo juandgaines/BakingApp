@@ -1,6 +1,7 @@
 package com.mytechideas.bakingapp;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.LoadControl;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 import com.mytechideas.bakingapp.retrofit.Ingredient;
 import com.mytechideas.bakingapp.retrofit.Step;
 
@@ -26,6 +38,11 @@ public class StepDetailFragment extends Fragment {
 
     private Step mStep;
     private boolean mode;
+    private SimpleExoPlayer mExoplayer;
+    private SimpleExoPlayerView mSimpleExoplayerView ;
+    private long playbackPosition;
+    private int currentWindow;
+    private boolean playWhenReady;
 
     public StepDetailFragment(){
 
@@ -72,12 +89,12 @@ public class StepDetailFragment extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.fragment_step_details, container, false);
 
-        ImageView imageView= rootView.findViewById(R.id.exoplayer_view);
+        mSimpleExoplayerView= rootView.findViewById(R.id.exoplayer_view);
         TextView textView = rootView.findViewById(R.id.step_description);
+
 
         if(savedInstanceState!=null){
             mStep=savedInstanceState.getParcelable(STEP_STATE);
-            mode=savedInstanceState.getBoolean(TABLETMODE);
         }
         Button button = rootView.findViewById(R.id.button_next);
         String overAllDescription=mStep.getDescription();
@@ -85,7 +102,7 @@ public class StepDetailFragment extends Fragment {
         textView.setText(overAllDescription);
 
 
-        if(!mode) {
+        if(!getResources().getBoolean(R.bool.tablet_mode)) {
 
 
             button.setVisibility(View.VISIBLE);
@@ -114,6 +131,88 @@ public class StepDetailFragment extends Fragment {
 
 
 
+
+    }
+
+    private void initializePlayer() {
+     if(mExoplayer==null){
+
+         TrackSelector trackSelector= new DefaultTrackSelector();
+         LoadControl loadControl= new DefaultLoadControl();
+         mExoplayer= ExoPlayerFactory.newSimpleInstance(getContext(),trackSelector,loadControl);
+         mSimpleExoplayerView.setPlayer(mExoplayer);
+     }
+        String FirstLink=mStep.getVideoURL();
+        String SecondLink= mStep.getThumbnailURL();
+
+        Uri uri =null;
+        if( !FirstLink.equals("")){
+            uri = Uri.parse(mStep.getVideoURL());
+        }
+        else if (!SecondLink.equals("")) {
+            uri = Uri.parse(mStep.getThumbnailURL());
+        }
+        else{
+            uri=null;
+        }
+
+
+        MediaSource mediaSource = buildMediaSource(uri);
+        mExoplayer.prepare(mediaSource, true, false);
+
+
+    }
+    private MediaSource buildMediaSource(Uri uri) {
+
+
+        return new ExtractorMediaSource.Factory(
+
+                new DefaultHttpDataSourceFactory("BakingApp")).
+                createMediaSource(uri);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23) {
+            initializePlayer();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //hideSystemUi();
+        if ((Util.SDK_INT <= 23 || mExoplayer == null)) {
+            initializePlayer();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
+    }
+
+    private void releasePlayer() {
+        if (mExoplayer!= null) {
+            playbackPosition = mExoplayer.getCurrentPosition();
+            
+            currentWindow = mExoplayer.getCurrentWindowIndex();
+            playWhenReady = mExoplayer.getPlayWhenReady();
+            mExoplayer.release();
+            mExoplayer = null;
+        }
     }
 
 

@@ -8,6 +8,7 @@ import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -52,6 +53,7 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
 
             fragmentManager.beginTransaction()
                     .add(R.id.step_container, mDetail)
+                    .addToBackStack(null)
                     .commit();
 
         }
@@ -86,7 +88,7 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
 
         int display_mode = getResources().getConfiguration().orientation;
 
-        if (hasFocus && display_mode == Configuration.ORIENTATION_LANDSCAPE) {
+        if (hasFocus && display_mode == Configuration.ORIENTATION_LANDSCAPE && !getResources().getBoolean(R.bool.tablet_mode)) {
             hideSystemUI();
             flag = false;
         }
@@ -127,8 +129,6 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
 
         int display_mode = getResources().getConfiguration().orientation;
 
-
-
             int action = event.getActionMasked();
 
 
@@ -159,5 +159,14 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
         super.onSaveInstanceState(outState);
 
         outState.putParcelable(RECIPE_STATE,mRecipe);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return false;
     }
 }

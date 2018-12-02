@@ -21,6 +21,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements MasterLi
     public static final String LOG_TAG= RecipeDetailsActivity.class.getSimpleName();
     private static final String MODE_STATE = "state";
     private static final String TABLE_MODE = "mode";
+    private static final String RECIPE_STATE ="recipe_state" ;
     private boolean twoPanel;
 
 
@@ -75,6 +76,10 @@ public class RecipeDetailsActivity extends AppCompatActivity implements MasterLi
             }
         }
 
+        else {
+            pRecipe=savedInstanceState.getParcelable(RECIPE_STATE);
+        }
+
 
     }
 
@@ -113,5 +118,10 @@ public class RecipeDetailsActivity extends AppCompatActivity implements MasterLi
 
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
+        outState.putParcelable(RECIPE_STATE,pRecipe);
+    }
 }

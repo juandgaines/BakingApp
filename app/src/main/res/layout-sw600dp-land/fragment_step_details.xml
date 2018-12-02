@@ -11,22 +11,16 @@
         android:id="@+id/exoplayer_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="7"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_weight="4"/>
 
     <TextView
         android:id="@+id/step_description"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_weight="1"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Instructions...."
+
         app:layout_constraintStart_toStartOf="@+id/exoplayer_view"
         app:layout_constraintTop_toBottomOf="@+id/exoplayer_view" />
 
@@ -36,6 +30,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_gravity="center"
+        android:visibility="gone"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"

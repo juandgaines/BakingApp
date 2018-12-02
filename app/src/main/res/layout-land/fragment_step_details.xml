@@ -7,11 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".StepDetailActivity">
 
-    <ImageView
+    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/exoplayer_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/ic_cake_1" />
+         />
 
     <TextView
         android:id="@+id/step_description"

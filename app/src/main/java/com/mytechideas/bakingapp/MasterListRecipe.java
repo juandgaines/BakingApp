@@ -98,7 +98,6 @@ public class MasterListRecipe extends Fragment implements  StepsAdapter.StepsAda
                 //recyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
             }
 
-
             String totalIngredients="";
             for (Ingredient ingredient:mImgredients){
 
@@ -142,6 +141,7 @@ public class MasterListRecipe extends Fragment implements  StepsAdapter.StepsAda
         {
             Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(RECYCLERVIEW_STATE);
             recyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
+            mRecipe=savedInstanceState.getParcelable(SAVED_RECIPE);
         }
     }
 
