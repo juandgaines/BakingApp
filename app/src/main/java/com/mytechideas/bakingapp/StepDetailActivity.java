@@ -53,7 +53,6 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
 
             fragmentManager.beginTransaction()
                     .add(R.id.step_container, mDetail)
-                    .addToBackStack(null)
                     .commit();
 
         }
@@ -124,35 +123,6 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
     }
 
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-
-        int display_mode = getResources().getConfiguration().orientation;
-
-            int action = event.getActionMasked();
-
-
-            switch (action) {
-
-                case (MotionEvent.ACTION_DOWN):
-                    if (display_mode == Configuration.ORIENTATION_LANDSCAPE) {
-                        if (!flag) {
-                            hideSystemUI();
-
-                            flag = true;
-
-                        } else {
-                            flag = false;
-                            showSystemUI();
-                        }
-                    }
-                    return true;
-
-                default:
-                    return super.onTouchEvent(event);
-            }
-
-    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -164,7 +134,8 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            onBackPressed();
+            //finish();
             return true;
         }
         return false;
