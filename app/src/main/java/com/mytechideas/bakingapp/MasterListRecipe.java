@@ -1,5 +1,7 @@
 package com.mytechideas.bakingapp;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -119,6 +121,10 @@ public class MasterListRecipe extends Fragment implements  StepsAdapter.StepsAda
 
 
             recyclerView.setHasFixedSize(true);
+
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
+            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(getContext(), RecipeWidgetProvider.class));
+            RecipeWidgetProvider.updateRecipeWidgets(getContext(), appWidgetManager, appWidgetIds, mRecipe.getName(),totalIngredients);
 
 
             return rootView;

@@ -1,8 +1,11 @@
 package com.mytechideas.bakingapp;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
+import android.view.View;
 import android.widget.RemoteViews;
 
 /**
@@ -10,23 +13,47 @@ import android.widget.RemoteViews;
  */
 public class RecipeWidgetProvider extends AppWidgetProvider {
 
+    private static boolean firstTime=true;
+
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
-
-        CharSequence widgetText = context.getString(R.string.appwidget_text);
+                                int appWidgetId, String recipeName,String ingredients) {
         // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget_provider);
-        views.setTextViewText(R.id.appwidget_text, widgetText);
 
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget_provider);
+        if(!firstTime) {
+            views.setViewVisibility(R.id.ingredients_content_widget, View.VISIBLE);
+            views.setViewVisibility(R.id.ingredients_label_widget, View.VISIBLE);
+
+            views.setTextViewText(R.id.appwidget_text, recipeName);
+            views.setTextViewText(R.id.ingredients_content_widget, ingredients);
+
+        }
+        Intent intent =new Intent(context,MainActivity.class);
+        PendingIntent pendingIntent=PendingIntent.getActivity(context,0,intent,0);
+
+        views.setOnClickPendingIntent(R.id.appwidget_text,pendingIntent);
+        views.setOnClickPendingIntent(R.id.next_label,pendingIntent);
+        
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
+
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // There may be multiple widgets active, so update all of them
+
+        if(firstTime){
+            for (int appWidgetId : appWidgetIds) {
+                updateAppWidget(context, appWidgetManager, appWidgetId,null,null);
+            }
+            firstTime=false;
+        }
+    }
+
+    public static  void updateRecipeWidgets(Context context,AppWidgetManager appWidgetManager, int[] appWidgetIds, String recipeName,String ingredients){
+
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
+            updateAppWidget(context, appWidgetManager, appWidgetId,recipeName,ingredients);
         }
     }
 

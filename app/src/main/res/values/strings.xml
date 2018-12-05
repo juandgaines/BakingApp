@@ -7,4 +7,6 @@
     <string name="next_step_button_label">Next step</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+    <string name="last_recipe_label">Last recipe:</string>
+    <string name="starting_message"><![CDATA[<Enter into the app and select a recipe to show ingredients>]]></string>
 </resources>

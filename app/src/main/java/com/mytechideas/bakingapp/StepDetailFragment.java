@@ -92,7 +92,6 @@ public class StepDetailFragment extends Fragment implements  ExoPlayer.EventList
         }
     }
 
-    // Inflates the GridView of all AndroidMe images
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -104,9 +103,11 @@ public class StepDetailFragment extends Fragment implements  ExoPlayer.EventList
         TextView textView = rootView.findViewById(R.id.step_description);
 
         initializeMediaSession();
+
         if(savedInstanceState!=null){
             mStep=savedInstanceState.getParcelable(STEP_STATE);
             playbackPosition=savedInstanceState.getLong(PLAYBACK_POSITION);
+            currentWindow=savedInstanceState.getInt(CURRENT_WINDOW);
 
         }
         Button button = rootView.findViewById(R.id.button_next);
@@ -141,15 +142,11 @@ public class StepDetailFragment extends Fragment implements  ExoPlayer.EventList
 
         outState.putParcelable(STEP_STATE,mStep);
         playbackPosition = mExoplayer.getCurrentPosition();
-
-
         outState.putLong(PLAYBACK_POSITION, playbackPosition);
-
         outState.putInt(CURRENT_WINDOW, currentWindow);
         outState.putBoolean(PLAY_WHEN_READY, playWhenReady);
 
     }
-
     private void initializePlayer() {
      if(mExoplayer==null){
 
@@ -173,17 +170,14 @@ public class StepDetailFragment extends Fragment implements  ExoPlayer.EventList
             uri=null;
         }
 
-
         MediaSource mediaSource = buildMediaSource(uri);
         mExoplayer.prepare(mediaSource, true, false);
-
         mExoplayer.setPlayWhenReady(true);
         mExoplayer.seekTo(currentWindow, playbackPosition);
 
 
     }
     private MediaSource buildMediaSource(Uri uri) {
-
 
         return new ExtractorMediaSource.Factory(
 
@@ -246,18 +240,12 @@ public class StepDetailFragment extends Fragment implements  ExoPlayer.EventList
 
     private void initializeMediaSession() {
 
-        // Create a MediaSessionCompat.
-        mMediaSession = new MediaSessionCompat(getContext(), LOG_TAG);
 
-        // Enable callbacks from MediaButtons and TransportControls.
+        mMediaSession = new MediaSessionCompat(getContext(), LOG_TAG);
         mMediaSession.setFlags(
                 MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
                         MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-
-        // Do not let MediaButtons restart the player when the app is not visible.
         mMediaSession.setMediaButtonReceiver(null);
-
-        // Set an initial PlaybackState with ACTION_PLAY, so media buttons can start the player.
         mStateBuilder = new PlaybackStateCompat.Builder()
                 .setActions(
                         PlaybackStateCompat.ACTION_PLAY |
@@ -267,11 +255,8 @@ public class StepDetailFragment extends Fragment implements  ExoPlayer.EventList
 
         mMediaSession.setPlaybackState(mStateBuilder.build());
 
-
-        // MySessionCallback has methods that handle callbacks from a media controller.
         mMediaSession.setCallback(new MySessionCallback());
 
-        // Start the Media Session since the activity is active.
         mMediaSession.setActive(true);
 
     }
