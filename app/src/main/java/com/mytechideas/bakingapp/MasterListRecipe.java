@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,15 +72,10 @@ public class MasterListRecipe extends Fragment implements  StepsAdapter.StepsAda
         }
     }
 
-
-
-
-
-    // Mandatory empty constructor
     public MasterListRecipe() {
+
     }
 
-    // Inflates the GridView of all AndroidMe images
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -90,6 +86,8 @@ public class MasterListRecipe extends Fragment implements  StepsAdapter.StepsAda
 
             recyclerView = rootView.findViewById(R.id.steps_listview);
             TextView textView = rootView.findViewById(R.id.ingredients_content);
+            TextView textTitle = rootView.findViewById(R.id.textView);
+
 
 
             if(savedInstanceState!=null){
@@ -110,7 +108,10 @@ public class MasterListRecipe extends Fragment implements  StepsAdapter.StepsAda
                 totalIngredients+= "*"+quantity+" "+measure+ " "+ingre+"\n";
             }
 
+            String mTitle=mRecipe.getName();
             textView.setText(totalIngredients);
+            textTitle.setText(mTitle);
+            int id=0;
             StepsAdapter mStepsAdapter= new StepsAdapter(this,mSteps);
 
             recyclerView.setAdapter(mStepsAdapter);
@@ -124,9 +125,20 @@ public class MasterListRecipe extends Fragment implements  StepsAdapter.StepsAda
 
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(getContext(), RecipeWidgetProvider.class));
-            RecipeWidgetProvider.updateRecipeWidgets(getContext(), appWidgetManager, appWidgetIds, mRecipe.getName(),totalIngredients);
 
-
+            if(mTitle.equals("Nutella Pie")){
+                id=R.drawable.ic_nutella_pie_2;
+            }
+            else  if(mTitle.equals("Brownies")){
+                id=R.drawable.ic_brownie_2;
+            }
+            else  if(mTitle.equals("Yellow Cake")){
+                id=R.drawable.ic_yellowcake;
+            }
+            else  if(mTitle.equals("Cheesecake")){
+                id=R.drawable.ic_cheescake;
+            }
+            RecipeWidgetProvider.updateRecipeWidgets(getContext(), appWidgetManager, appWidgetIds, mRecipe.getName(),totalIngredients,id);
             return rootView;
 
 

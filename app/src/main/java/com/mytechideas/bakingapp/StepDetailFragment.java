@@ -161,13 +161,16 @@ public class StepDetailFragment extends Fragment implements  ExoPlayer.EventList
 
         Uri uri =null;
         if( !FirstLink.equals("")){
+            mSimpleExoplayerView.setVisibility(View.VISIBLE);
             uri = Uri.parse(mStep.getVideoURL());
         }
         else if (!SecondLink.equals("")) {
             uri = Uri.parse(mStep.getThumbnailURL());
+            mSimpleExoplayerView.setVisibility(View.VISIBLE);
         }
         else{
             uri=null;
+            mSimpleExoplayerView.setVisibility(View.GONE);
         }
 
         MediaSource mediaSource = buildMediaSource(uri);

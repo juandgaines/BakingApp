@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.mytechideas.bakingapp.retrofit.Ingredient;
@@ -26,6 +27,8 @@ public class RecipeDetailsActivity extends AppCompatActivity implements MasterLi
 
 
     private StepDetailFragment mDetail;
+
+    private ScrollView mainScrollView;
 
 
 
@@ -49,13 +52,16 @@ public class RecipeDetailsActivity extends AppCompatActivity implements MasterLi
             mMaster.setRecipe(pRecipe);
 
 
+
+
             FragmentManager fragmentManager = getSupportFragmentManager();
 
             fragmentManager.beginTransaction()
                     .add(R.id.recipe_container, mMaster)
                     .commit();
 
-
+            ScrollView mainScrollView= findViewById(R.id.scrollview_activity);
+            mainScrollView.fullScroll(ScrollView.FOCUS_UP);
             if (findViewById(R.id.recipe_details_linear_layout) != null) {
 
                 twoPanel = true;
@@ -79,6 +85,9 @@ public class RecipeDetailsActivity extends AppCompatActivity implements MasterLi
         else {
             pRecipe=savedInstanceState.getParcelable(RECIPE_STATE);
         }
+
+
+
 
 
     }

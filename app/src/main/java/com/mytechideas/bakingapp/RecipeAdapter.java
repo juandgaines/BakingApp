@@ -20,7 +20,6 @@ class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHolder> {
 
     public final static String LOG_TAG= RecipeAdapter.class.getName().toString();
     private Context context;
-    public static int count=0;
     private List<Recipe> mRecipeData;
     private final RecipeAdapterOnClickHandler mClickHandler;
 
@@ -33,7 +32,6 @@ class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHolder> {
     public interface RecipeAdapterOnClickHandler {
         void onClick(Recipe movieData);
     }
-
 
     @NonNull
     @Override
@@ -51,27 +49,18 @@ class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeHolder> {
     public void onBindViewHolder(@NonNull RecipeHolder recipeViewHolder, int position ) {
         String mTitle =mRecipeData.get(position).getName();
 
-        TypedValue outValue = new TypedValue();
 
-        //context.getResources().getValue(R.dimen.picasso_image_divisor,outValue,true);
-
-        float divisor= outValue.getFloat();
-
-        if(count==0){
+        if(mTitle.equals("Nutella Pie")){
             recipeViewHolder.mRecipePosterView.setImageDrawable(context.getDrawable(R.drawable.ic_nutella_pie_2));
-            count++;
         }
-        else  if(count==1){
+        else  if(mTitle.equals("Brownies")){
             recipeViewHolder.mRecipePosterView.setImageDrawable(context.getDrawable(R.drawable.ic_brownie_2));
-            count++;
         }
-        else  if(count==2){
+        else  if(mTitle.equals("Yellow Cake")){
             recipeViewHolder.mRecipePosterView.setImageDrawable(context.getDrawable(R.drawable.ic_yellowcake));
-            count++;
         }
-        else  if(count==3){
+        else  if(mTitle.equals("Cheesecake")){
             recipeViewHolder.mRecipePosterView.setImageDrawable(context.getDrawable(R.drawable.ic_cheescake));
-            count=0;
         }
 
         recipeViewHolder.mTitleRecipe.setText(mTitle);
