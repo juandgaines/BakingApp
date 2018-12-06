@@ -28,8 +28,6 @@ public class BakingAppTest {
 
     private static final String RECIPE_NAME = "Nutella Pie";
 
-
-
     @Rule public ActivityTestRule<MainActivity> mActivityTestRule=
             new ActivityTestRule<>(MainActivity.class);
 
@@ -40,8 +38,6 @@ public class BakingAppTest {
 
         mIdlingResource= mActivityTestRule.getActivity().getIdlingResource();
         Espresso.registerIdlingResources(mIdlingResource);
-
-
 
     }
 
