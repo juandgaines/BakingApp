@@ -3,13 +3,17 @@ package com.mytechideas.bakingapp;
 import android.content.Intent;
 import android.os.Parcelable;
 import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.mytechideas.bakingapp.IdlingResource.SimpleIdlingResource;
 import com.mytechideas.bakingapp.retrofit.Ingredient;
 import com.mytechideas.bakingapp.retrofit.Recipe;
 import com.mytechideas.bakingapp.retrofit.RecipeService;
@@ -27,6 +31,8 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements RecipeAdapter.RecipeAdapterOnClickHandler{
 
+    @Nullable private SimpleIdlingResource mIdlingResource;
+
     public static final String LOG_TAG=MainActivity.class.getSimpleName();
     public static final String KEY_RECYCLERVIEW_1="position1";
     private Parcelable mRecyclerViewState1;
@@ -34,20 +40,31 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     @BindView(R.id.recipe_listview) RecyclerView mRecyclerView;
 
 
+
     private RecipeAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        getIdlingResource();
 
 
         mAdapter=new RecipeAdapter(MainActivity.this, null);
         mRecyclerView.setAdapter(mAdapter);
 
-        RecipeService movieService= RetrofitSingleton.getRecipeService();
+
         final int columns = getResources().getInteger(R.integer.activity_columns_recyclerview);
         mLayoutManager = new GridLayoutManager(this,columns);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -57,6 +74,27 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         }
 
         mRecyclerView.setHasFixedSize(true);
+
+
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchDataFromRetrofit(mIdlingResource);
+
+
+    }
+
+
+    public void fetchDataFromRetrofit(@Nullable final SimpleIdlingResource idlingResource){
+        RecipeService movieService= RetrofitSingleton.getRecipeService();
+
+        if (idlingResource != null) {
+            idlingResource.setIdleState(false);
+        }
 
 
         movieService.getRecipes().enqueue(new Callback<List<Recipe>>() {
@@ -79,6 +117,12 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
                 }
 
                 mAdapter.setRecipeData(mRecipies);
+                mAdapter.notifyDataSetChanged();
+
+                if(idlingResource!=null){
+                   idlingResource.setIdleState(true);
+                }
+
 
             }
 

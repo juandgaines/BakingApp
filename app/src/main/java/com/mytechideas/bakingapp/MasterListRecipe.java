@@ -3,6 +3,7 @@ package com.mytechideas.bakingapp;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -124,6 +125,7 @@ public class MasterListRecipe extends Fragment implements  StepsAdapter.StepsAda
             recyclerView.setHasFixedSize(true);
 
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
+
             int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(getContext(), RecipeWidgetProvider.class));
 
             if(mTitle.equals("Nutella Pie")){
@@ -139,6 +141,9 @@ public class MasterListRecipe extends Fragment implements  StepsAdapter.StepsAda
                 id=R.drawable.ic_cheescake;
             }
             RecipeWidgetProvider.updateRecipeWidgets(getContext(), appWidgetManager, appWidgetIds, mRecipe.getName(),totalIngredients,id);
+
+
+
             return rootView;
 
 

@@ -1,5 +1,7 @@
 package com.mytechideas.bakingapp;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -85,10 +87,6 @@ public class RecipeDetailsActivity extends AppCompatActivity implements MasterLi
         else {
             pRecipe=savedInstanceState.getParcelable(RECIPE_STATE);
         }
-
-
-
-
 
     }
 
