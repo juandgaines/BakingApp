@@ -63,6 +63,7 @@ public class BakingAppIntentTest {
 
         if(mIdlingResource!=null){
             Espresso.unregisterIdlingResources(mIdlingResource);
+
         }
     }
 }
