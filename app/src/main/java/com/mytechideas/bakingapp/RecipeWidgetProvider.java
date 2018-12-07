@@ -8,25 +8,34 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Implementation of App Widget functionality.
  */
 public class RecipeWidgetProvider extends AppWidgetProvider {
-
+    private static final String ARRAY ="ingredients" ;
     private static boolean firstTime=true;
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId, String recipeName,String ingredients,int resourceImage) {
-        // Construct the RemoteViews object
+                                int appWidgetId, String recipeName, ArrayList<String> ingredients, int resourceImage) {
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget_provider);
+
         if(!firstTime) {
-            views.setViewVisibility(R.id.ingredients_content_widget, View.VISIBLE);
+
             views.setViewVisibility(R.id.ingredients_label_widget, View.VISIBLE);
+
             views.setViewVisibility(R.id.recipe_image,View.VISIBLE);
             views.setTextViewText(R.id.appwidget_text, recipeName);
-            views.setTextViewText(R.id.ingredients_content_widget, ingredients);
+
+            Intent intent= new Intent(context,ListWidgetService.class);
+            intent.putStringArrayListExtra(ARRAY,ingredients);
+            views.setRemoteAdapter(R.id.ingredients_content_widget,intent);
             views.setImageViewResource(R.id.recipe_image,resourceImage);
+
+
 
         }
         Intent intent =new Intent(context,MainActivity.class);
@@ -34,7 +43,6 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
 
         views.setOnClickPendingIntent(R.id.appwidget_text,pendingIntent);
         views.setOnClickPendingIntent(R.id.next_label,pendingIntent);
-        views.setOnClickPendingIntent(R.id.ingredients_content_widget,pendingIntent);
         views.setOnClickPendingIntent(R.id.recipe_image, pendingIntent);
 
         // Instruct the widget manager to update the widget
@@ -53,7 +61,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
         }
     }
 
-    public static  void updateRecipeWidgets(Context context,AppWidgetManager appWidgetManager, int[] appWidgetIds, String recipeName,String ingredients, int resourceImage){
+    public static  void updateRecipeWidgets(Context context,AppWidgetManager appWidgetManager, int[] appWidgetIds, String recipeName,ArrayList<String> ingredients, int resourceImage){
 
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId,recipeName,ingredients,resourceImage);

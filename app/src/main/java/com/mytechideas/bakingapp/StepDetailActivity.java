@@ -15,6 +15,7 @@ import android.view.View;
 import com.mytechideas.bakingapp.retrofit.Recipe;
 import com.mytechideas.bakingapp.retrofit.Step;
 import com.mytechideas.bakingapp.retrofit.StepRecipeContainerClass;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -44,8 +45,6 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
             mContainer = intent.getParcelableExtra(StepRecipeContainerClass.PARCELABLE);
             mRecipe = mContainer.getmRecipe();
             pStep = mContainer.getmStep();
-
-
             mStepId = pStep.getId();
             mDetail.setStep(pStep);
 
@@ -89,7 +88,7 @@ public class StepDetailActivity extends AppCompatActivity implements StepDetailF
 
         if (hasFocus && display_mode == Configuration.ORIENTATION_LANDSCAPE && !getResources().getBoolean(R.bool.tablet_mode)) {
             hideSystemUI();
-            flag = false;
+
         }
 
     }

@@ -28,6 +28,7 @@ import com.mytechideas.bakingapp.retrofit.Ingredient;
 import com.mytechideas.bakingapp.retrofit.Recipe;
 import com.mytechideas.bakingapp.retrofit.Step;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MasterListRecipe extends Fragment implements  StepsAdapter.StepsAdapterOnClickHandler{
@@ -99,6 +100,7 @@ public class MasterListRecipe extends Fragment implements  StepsAdapter.StepsAda
                 //recyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
             }
 
+            ArrayList<String> enhancedIngredients= new ArrayList<String>();
             String totalIngredients="";
             for (Ingredient ingredient:mImgredients){
 
@@ -106,7 +108,9 @@ public class MasterListRecipe extends Fragment implements  StepsAdapter.StepsAda
                 String measure= ingredient.getMeasure();
                 Double  quantity =ingredient.getQuantity();
 
-                totalIngredients+= "*"+quantity+" "+measure+ " "+ingre+"\n";
+                String buffer= "*"+quantity+" "+measure+ " "+ingre+"\n";
+                enhancedIngredients.add(buffer);
+                totalIngredients+=buffer;
             }
 
             String mTitle=mRecipe.getName();
@@ -140,7 +144,7 @@ public class MasterListRecipe extends Fragment implements  StepsAdapter.StepsAda
             else  if(mTitle.equals("Cheesecake")){
                 id=R.drawable.ic_cheescake;
             }
-            RecipeWidgetProvider.updateRecipeWidgets(getContext(), appWidgetManager, appWidgetIds, mRecipe.getName(),totalIngredients,id);
+            RecipeWidgetProvider.updateRecipeWidgets(getContext(), appWidgetManager, appWidgetIds, mRecipe.getName(),enhancedIngredients,id);
 
 
 

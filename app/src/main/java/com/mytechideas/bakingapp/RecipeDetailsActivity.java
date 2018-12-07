@@ -93,7 +93,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements MasterLi
     @Override
     public void onStepSelected(Step position) {
 
-        if(twoPanel){
+        if(getResources().getBoolean(R.bool.tablet_mode)){
 
             mDetail = new StepDetailFragment();
 
